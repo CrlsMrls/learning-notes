@@ -1,5 +1,11 @@
 # Pods
 
+At the core of Kubernetes is the Pod. Pods represent and hold a collection of one or more containers. Generally, if you have multiple containers with a hard dependency on each other, you package the containers inside a single pod.
+
+Pods also have Volumes. Volumes are data disks that live as long as the pods live, and can be used by the containers in that pod. Pods provide a shared namespace for their contents which means that the two containers inside of our example pod can communicate with each other, and they also share the attached volumes.
+
+Pods also share a network namespace. This means that there is one IP Address per pod.
+
 ## Get information on pods
 
 ```bash
@@ -16,7 +22,7 @@ NAME           STATUS   ROLES                  AGE     VERSION        INTERNAL-I
 controlplane   Ready    control-plane,master   6m28s   v1.22.2+k3s2   172.25.0.48   <none>        Alpine Linux v3.14   5.4.0-1028-gcp   containerd://1.5.7-k3s1
 ```
 
-## Create pods
+## Pod lifecycle
 
 Create a new pod with the `nginx` image.
 
@@ -48,6 +54,8 @@ Node:         controlplane/172.25.0.83
 $ kubectl delete pod <pod-id>
 pod "<pod-id>" deleted
 ```
+
+## Pod creation
 
 Create a manifest file with kubectl using the options **--dry-run=client -o yaml**
 

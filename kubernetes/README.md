@@ -7,3 +7,5 @@
 - [Pods](./pods.md)
 - [Replica Sets](./replica-sets.md)
 - [Deployments](./deployments.md)
+- [Services](./services.md)
+- [Helm](./helm.md)

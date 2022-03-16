@@ -1,5 +1,6 @@
 # learning-notes
 
-These are my personal learning notes. They act as summary, cheat sheets and are for personal use.
+These are my personal learning notes on several IT topics. They are summaries and cheat sheets for personal use.
 
-- [Kubernetes](/kubernetes/README.md)
+- [Kubernetes](./kubernetes/README.md)
+- [Sizing](./sizing/)

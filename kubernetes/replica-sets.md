@@ -1,6 +1,6 @@
 # Replica sets
 
-Replica sets guarantee a number of identical Pods are running.
+Replica sets guarantee a number of identical Pods are running. They handle restarting Pods if they happen to go down for some reason.
 
 ## Definition file
 
@@ -44,6 +44,8 @@ replicaset.apps/new-replica-set created
 ```
 
 ## Getting information
+
+Once the deployment is created, Kubernetes will create a ReplicaSet for the Deployment.
 
 Get information on the ReplicaSets with **kubectl get replicaset** or **kubectl get rs**:
 
