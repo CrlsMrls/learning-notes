@@ -15,3 +15,36 @@ The level of access a service provides to a set of pods depends on the Service's
 - **LoadBalancer**: adds a load balancer from the cloud provider which forwards traffic from the service to Nodes within it.
 
 http://kubernetes.io/docs/user-guide/services/
+
+## Service creation
+
+Create a service definition file from the imperative command:
+
+kubectl run httpd --image=httpd:alpine --port 80 --expose --dry-run=client -o yaml > service-definition.yml
+
+```bash
+$ kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml > service-definition.yml
+
+$ cat service-definition.yml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: redis
+  name: redis
+spec:
+  ports:
+  - name: 6379-6379
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    app: redis
+  type: ClusterIP
+status:
+  loadBalancer: {}
+
+$ kubectl apply -f service-definition.yml
+service/redis created
+```

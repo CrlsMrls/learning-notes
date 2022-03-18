@@ -2,7 +2,44 @@
 
 A Deployment provides declarative updates for Pods and ReplicaSets. They provide the mechanisms to roll updates and rollbacks.
 
-The main benefit of Deployments is in abstracting away the low level details of managing Pods. Behind the scenes Deployments use [Replica Sets](replica-sets.md) to manage starting and stopping the Pods. If Pods need to be updated or scaled, the Deployment will handle that.
+The main benefit of Deployments is in abstracting away the low level details of managing Pods. Behind the scenes Deployments use [Replica Sets](replica-sets.md) to manage starting and stopping the Pods. If Pods need to be updated or scaled in a controlled way, the Deployment will handle that.
+
+## Deployment creation
+
+Create a manifest file with kubectl using the options **--dry-run=client -o yaml**
+
+```bash
+$ kubectl create deployment frontend-deployment --image=nginx:alpine --replicas=4 --dry-run=client -o yaml > nginx-deployment.yml
+
+$ cat nginx-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: frontend-deployment
+  name: frontend-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: frontend-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: frontend-deployment
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: nginx
+        resources: {}
+status: {}
+
+$  kubectl apply -f nginx-deployment.yml
+deployment.apps/frontend-deployment created
+```
 
 ## Show deployment information
 
@@ -43,6 +80,13 @@ spec:
 $ kubectl apply -f ./deployment-def.yml
 deployment.apps/httpd-frontend created
 
+```
+
+## Deletion
+
+```bash
+$ kubectl delete deployment webapp
+deployment.apps "webapp" deleted
 ```
 
 ## Rollup and rollback updates

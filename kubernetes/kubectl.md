@@ -28,14 +28,6 @@ It is preferred to use it with a file for satisfying infrastructure as code, alt
 
 ## Get information
 
-### Change output format
-
-Output format can be changed to
-
-- -o wide
-- -o yaml
-- -o json
-
 ### kubectl describe <resource>
 
 This command needs a resource type or a resource name
@@ -81,3 +73,68 @@ Lists the namespaces. The namespaces logically split the resources in a cluster.
 Shortcut can be `ns` or `namespace`.
 
 Creates a new namespace: `kubectl create --namespace=<namespace-name>`
+
+### Change output format
+
+`kubectl [command] [TYPE] [NAME] -o <output_format>` where the output format can be changed to
+
+- **-o name**: Only output the resource name.
+- **-o wide**: Output in plain-text format with additional information.
+- **-o yaml**: Output a YAML formatted API object.
+- **-o json**: Output a JSON formatted API object.
+
+### Declarative files from imperative commands
+
+Definition files can easily be created with the imperative commands.
+
+- `-dry-run=client` will not execute the command, instead it will check whether the command is valid and can be executed.
+- `-o yaml` will print the command in yaml file format
+
+For example:
+
+```bash
+$ kubectl run front-ui --image=nginx --dry-run=client -o yaml > pod-definition.yml
+$ kubectl create deployment nginx --image=nginx --dry-run=client -o yaml > nginx-deployment.yml
+$ kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml > service-definition.yml
+```
+
+This can be specially useful for creating a pod and exposing the pod in a service with one command:
+
+```bash
+$ kubectl run httpd --image=httpd:alpine --port 80 --expose --dry-run=client -o yaml > pod-service-definition.yml
+
+$ cat pod-service-definition.yml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: httpd
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: httpd
+status:
+  loadBalancer: {}
+---
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: httpd
+  name: httpd
+spec:
+  containers:
+  - image: httpd:alpine
+    name: httpd
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```

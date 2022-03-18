@@ -50,6 +50,8 @@ Node:         controlplane/172.25.0.83
 ## .....
 ```
 
+Finally, delete the pod
+
 ```bash
 $ kubectl delete pod <pod-id>
 pod "<pod-id>" deleted
@@ -60,7 +62,7 @@ pod "<pod-id>" deleted
 Create a manifest file with kubectl using the options **--dry-run=client -o yaml**
 
 ```bash
-$ kubectl run front-ui --image=nginx --dry-run=client -o yaml > definition.yml
+$ kubectl run front-ui --image=nginx --labels="tier=frontend,app=angular" --dry-run=client -o yaml > definition.yml
 
 $ cat definition.yml
 apiVersion: v1
@@ -68,7 +70,8 @@ kind: Pod
 metadata:
   creationTimestamp: null
   labels:
-    run: front-ui
+    app: angular
+    tier: frontend
   name: front-ui
 spec:
   containers:
