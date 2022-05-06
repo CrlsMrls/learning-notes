@@ -1,10 +1,10 @@
-# EC2 Load Balancers
+# AWS EC2 Load Balancers
 
-## Template base Application Load Balancer
+## AWS Application Load Balancer with templates
 
 Steps:
 
-1. Create a `Lauch Template`
+1. Create a `Lauch Template` and define the base image
 1. Create an `Auto Scaling Groups` and associate the previous `Launch Template`
 1. Create a `Target Group` and assign it inside the previous `Auto Scaling Group`
 1. Create a `Application Load Balancer` and assign it to the `Target Group` or inside the `Auto Scaling Group`
@@ -12,6 +12,8 @@ Steps:
 ### 1. Lauch Template
 
 The `Lauch Template` describes the instances that will be used in the autoscaling group.
+
+Steps:
 
 - Select an AMI (Amazon Machine Image) - e.g. an Amazon Linux 2
 - Select an instance type - e.g. t2.micro
@@ -42,6 +44,8 @@ echo "<p>hostanme $(hostname -f)</p>" >>  /usr/share/nginx/html/index.html
 
 Amazon EC2 Auto Scaling helps to maintain application availability and allows to scale the EC2 capacity up or down automatically according to some conditions.
 
+Steps:
+
 - Use previous defined `Launch template`
 - Define in `Network` the VPC and one or more Availability Zones
 - Optionally here we could attach a `Load Balancer`
@@ -49,11 +53,22 @@ Amazon EC2 Auto Scaling helps to maintain application availability and allows to
   - desired, minimum and max capacity
   - Scaling policy based on CPU usage
 
+Scaling policies:
+
+- Cooldown: During the cooldown period, the ASG will not scale out nor in, to allow metrics to stabalize
+- CPU usage: Average CPU utilization
+- Request count per target: number of requests
+- Scheduled scaling: based on the time
+- Predictive scaling: forecast load based on Machine Learning rules
+- Custom metrics pushed using `CloudWatch`
+
 ### 2. (optional) Create Spot Fleet
 
 Instead of creating an Auto Scaling Group, we could create a Spot Fleet
 
 A Spot Instance is an unused EC2 instance that is available for less than the On-Demand price.
+
+Steps:
 
 - Use previous defined `Launch template`
 - Define `Target capacity`.
@@ -77,11 +92,13 @@ Go to the `Auto Scaling group` and assign the new `Target group` under Load Bala
 
 We can choose between the following Load Balancers:
 
-- Application (L7) - provide advanced routing
+- Application (L7) - provide advanced routing based on listener rules
 - Network (L4) - ultra-high performance, TLS
-- Gateway (L7) - improve security
+- Gateway (L3) - improve security by forwarding all traffic to Firewalls, WAF, IDS, etc.
+
+Steps:
 
 - Select internet-facing or internal LB
 - In the newtwork mapping select the AZ - e.g. at least two AZ
 - Assign a `Security Group` - e.g. allow HTTP traffic
-- Listeners rules direct the traffic to one target group
+- HTTP listeners rules (path, parameters, hostname, headers) define how to redirect the traffic to one target group
