@@ -55,12 +55,17 @@ Steps:
 
 Scaling policies:
 
-- Cooldown: During the cooldown period, the ASG will not scale out nor in, to allow metrics to stabalize
+- `Dynamic scaling`: tracking them based on target or multiple steps
+- `Predictive scaling:` forecast load based on Machine Learning rules
+- `Scheduled scaling:` based on the time
+
+Scaling metrics:
+
 - CPU usage: Average CPU utilization
 - Request count per target: number of requests
-- Scheduled scaling: based on the time
-- Predictive scaling: forecast load based on Machine Learning rules
 - Custom metrics pushed using `CloudWatch`
+
+**Cooldown:** During the cooldown period, the ASG will not scale out nor in, to allow metrics to stabalize
 
 ### 2. (optional) Create Spot Fleet
 
@@ -81,6 +86,8 @@ Steps:
 
 A target group tells a load balancer where to direct traffic to : EC2 instances, fixed IP addresses; or AWS Lambda functions, amongst others.
 
+Steps:
+
 - Choose target type - e.g. instances to use the EC2 Auto Scaling
 - Define `Protocol` - e.g. HTTP / HTTPS (and protocol version HTTP/1.1, HTTP/2 or gRPC)
 - Associate `Health checks` to test the target status
@@ -92,9 +99,15 @@ Go to the `Auto Scaling group` and assign the new `Target group` under Load Bala
 
 We can choose between the following Load Balancers:
 
-- Application (L7) - provide advanced routing based on listener rules
-- Network (L4) - ultra-high performance, TLS
-- Gateway (L3) - improve security by forwarding all traffic to Firewalls, WAF, IDS, etc.
+- Application (L7)
+  - provide advanced routing based on listener rules
+  - Cross-zone load balancing is ALWAYS enabled
+- Network (L4)
+  - ultra-high performance, TLS
+  - Cross-zone load balancing is disabled by default
+- Gateway (L3)
+  - improve security by forwarding all traffic to Firewalls, WAF, IDS, etc.
+  - Cross-zone load balancing is disabled by default
 
 Steps:
 
@@ -102,3 +115,17 @@ Steps:
 - In the newtwork mapping select the AZ - e.g. at least two AZ
 - Assign a `Security Group` - e.g. allow HTTP traffic
 - HTTP listeners rules (path, parameters, hostname, headers) define how to redirect the traffic to one target group
+
+### 5. Limit access
+
+Ensure only the ALB can access the EC2 instances by referencing the security groups in rules.
+
+## Concepts
+
+### Cross-zone load balancing
+
+The cross-zone load balancing can be
+
+- **enabled**: it means the load is a balanced and evenly distributed across all EC2 instances in all AZs.
+
+- **disabled**: the load is balanced evenly by AZ, independently of the number of EC2 instances that each AZ has.
