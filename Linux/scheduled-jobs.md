@@ -50,7 +50,7 @@ One of cron's biggest weaknesses is that it assumes that your server or computer
 
 Check the syntax in `/etc/anacrontab` file.
 
-## Adding and editing anacontab tasks
+### Adding and editing anacontab tasks
 
 For example for adding a task with the following specs:
 - It should run once every 10 days
