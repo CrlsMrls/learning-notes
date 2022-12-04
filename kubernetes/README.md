@@ -5,6 +5,7 @@
 - [Kubectl basic commands](./kubectl.md)
 - [Namespaces](./namespaces.md)
 - [Pods](./pods.md)
+- [Assigning Pods to Nodes](./assign-pods-nodes.md)
 - [Replica Sets](./replica-sets.md)
 - [Deployments](./deployments.md)
 - [Services](./services.md)
