@@ -1,4 +1,4 @@
-# Types of data
+# Data representation and visualization in Python
 
 ## Types of statistical data
 
