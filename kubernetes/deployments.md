@@ -95,13 +95,13 @@ Deployments support updating images to a new version through a rolling update me
 
 To update your Deployment, run the following command:
 
-```
+```bash
 kubectl edit deployment hello
 ```
 
 Change the image version in the containers section of the Deployment:
 
-```
+```yaml
 ...
 containers:
 - name: hello
@@ -109,33 +109,39 @@ containers:
 ...
 ```
 
-This will update the Deployment to your cluster and Kubernetes will begin a rolling update. To see the** rollout history**:
 
-```
+### 1. Rollout history
+This will update the Deployment to your cluster and Kubernetes will begin a rolling update. To see the **rollout history**:
+
+```bash
 kubectl rollout history deployment/frontend
 ```
 
-If you detect problems, **pause the running rollout** to stop the update:
-
-```
-kubectl rollout pause deployment/frontend
-```
-
+### 2. Rollout status
 Verify the **current state** of the rollout:
 
-```
+```bash
 kubectl rollout status deployment/frontend
 ```
 
+### 3. Rollout pause
+If you detect problems, **pause the running rollout** to stop the update:
+
+```bash
+kubectl rollout pause deployment/frontend
+```
+
+### 4. Rollout resume
 The rollout is paused which means that some pods are at the new version and some pods are at the older version. We can **continue the rollout** using the resume command.
 
-```
+```bash
 kubectl rollout resume deployment/frontend
 ```
 
+### 5. Rollout undo
 If a bug was detected in the new version, use the rollout command to **roll back** to the previous version:
 
-```
+```bash
 kubectl rollout undo deployment/frontend
 ```
 

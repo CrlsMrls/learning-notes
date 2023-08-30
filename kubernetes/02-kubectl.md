@@ -2,13 +2,31 @@
 
 kubectl is the command line tool for communicating with a Kubernetes cluster, it connects to control pane's API.
 
+- [kubectl](#kubectl)
+  - [Configuration](#configuration)
+  - [Common commands](#common-commands)
+    - [kubectl run](#kubectl-run)
+    - [kubectl apply](#kubectl-apply)
+    - [kubectl delete](#kubectl-delete)
+  - [Get information](#get-information)
+    - [kubectl describe ](#kubectl-describe-)
+    - [kubectl explain ](#kubectl-explain-)
+    - [kubectl get ](#kubectl-get-)
+    - [Change output format](#change-output-format)
+    - [Declarative files from imperative commands](#declarative-files-from-imperative-commands)
+
+
+
 ## Configuration
 
-Default configuration is ~/.kube/config.
+Default configuration is `~/.kube/config`. The command `kubectl config view` shows that information.
 
 Setting `kubectl --kubeconfig` allows to set a different config file.
 
 Configuration contains kubernetes cluster IP (`--server` option) and path to TLS certificates (`--user` option).
+
+
+The access configuration is stored in contexts. You can switch between different contexts. For example to permanently save the namespace for all subsequent kubectl commands in the current context: `kubectl config set-context --current --namespace=my-ns`
 
 ## Common commands
 
@@ -18,7 +36,7 @@ Configuration contains kubernetes cluster IP (`--server` option) and path to TLS
 
 ### kubectl apply
 
-`kubectl apply` creates or updates resources. It is prefered to use `apply` for satisfying infrastructure as code.
+`kubectl apply` creates or updates resources. Use `apply` as the preferred way for working with "infrastructure as code" methodology.
 
 ### kubectl delete
 
@@ -46,33 +64,12 @@ A very similar information should be found in API official documentation.
 
 ### kubectl get <resource>
 
-#### kubectl get nodes
+The most useful resources are:
+- `nodes`: Lists information on all nodes in the cluster. Shortcut of `node` can be `no` or `nodes`.
+- `services`: Service is a stable endpoint to connect to. Shortcut of `services` can be `svc`.
+- `pods`: Lists pods in a specific namespace: `kubectl get pods -n <namespace-name>`. By default it uses the `default` namespace. To list absolutely all pods in cluster: `kubectl get pods --all-namespaces` or `kubectl get pods -A`
+- `namespaces`: The namespaces logically split the resources in a cluster. Shortcut can be `ns` or `namespace`.
 
-Lists information on all nodes in the cluster.
-
-Shortcut of `node` can be `no` or `nodes`
-
-#### kubectl get services
-
-Shortcut of `services` can be `svc`
-
-Service is a stable endpoint to connect to "something". Originally called "portals".
-
-#### kubectl get pods
-
-One of the most useful commands. By default it uses the `default` namespace.
-
-List absolutely all pods in cluster: `kubectl get pods --all-namespaces` or `kubectl get pods -A`
-
-Lists pods in a specific namespace: `kubectl get pods -n <namespace-name>`
-
-#### kubectl get namespaces
-
-Lists the namespaces. The namespaces logically split the resources in a cluster.
-
-Shortcut can be `ns` or `namespace`.
-
-Creates a new namespace: `kubectl create --namespace=<namespace-name>`
 
 ### Change output format
 
@@ -102,8 +99,12 @@ This can be specially useful for creating a pod and exposing the pod in a servic
 
 ```bash
 $ kubectl run httpd --image=httpd:alpine --port 80 --expose --dry-run=client -o yaml > pod-service-definition.yml
+```
 
-$ cat pod-service-definition.yml
+
+The `pod-service-definition.yml` file will be:
+
+```yaml
 apiVersion: v1
 kind: Service
 metadata:

@@ -6,21 +6,10 @@ Pods also have Volumes. Volumes are data disks that live as long as the pods liv
 
 Pods also share a network namespace. This means that there is one IP Address per pod.
 
-## Get information on pods
+- [Pods](#pods)
+  - [Pod lifecycle](#pod-lifecycle)
+  - [Pod creation](#pod-creation)
 
-```bash
-$ kubectl get nodes
-NAME           STATUS   ROLES                  AGE     VERSION
-controlplane   Ready    control-plane,master   4m25s   v1.22.2+k3s2
-```
-
-For getting environment and running OS:
-
-```bash
-$ kubectl get nodes -o wide
-NAME           STATUS   ROLES                  AGE     VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION   CONTAINER-RUNTIME
-controlplane   Ready    control-plane,master   6m28s   v1.22.2+k3s2   172.25.0.48   <none>        Alpine Linux v3.14   5.4.0-1028-gcp   containerd://1.5.7-k3s1
-```
 
 ## Pod lifecycle
 
