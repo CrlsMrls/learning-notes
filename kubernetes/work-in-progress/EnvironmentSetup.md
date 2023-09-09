@@ -4,13 +4,13 @@
 
 Create a `.vimrc` file and the following lines for working with YAML files:
 
-```
+```bash
 $ cat ~/.vimrc
 
-set number relativenumber
+set number
 set ai et tb=2 sw=2
 ```
-- `rnu`: lines show relative numbers
+- `nu`: show line numbers
 - `ai`: autoindent: when go to new line keep same indentation
 - `et` or `expandtab`: use spaces for tab
 - `tb=2` or `tabstop=2`: amount of spaces used for tab
@@ -38,7 +38,7 @@ EOF
 source .bashrc
 
 cat <<EOF |  .vimrc
-set number relativenumber
+set number
 set paste
 set expandtab
 set tabstop=2
@@ -101,7 +101,7 @@ Full list (sorted alphabetically):
 
 ## Getting information
 
-```
+```bash
 $ kubectl explain deployment.spec.strategy
 KIND:     Deployment
 VERSION:  apps/v1
@@ -131,7 +131,7 @@ FIELDS:
 
 Show how it should look in the yaml file with the `--recursive` flag:
 
-```
+```bash
 $ kubectl explain deployment.spec.strategy --recursive
 KIND:     Deployment
 VERSION:  apps/v1

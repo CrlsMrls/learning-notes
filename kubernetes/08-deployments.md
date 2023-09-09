@@ -4,6 +4,19 @@ A Deployment provides declarative updates for Pods and ReplicaSets. They provide
 
 The main benefit of Deployments is in abstracting away the low level details of managing Pods. Behind the scenes Deployments use [Replica Sets](replica-sets.md) to manage starting and stopping the Pods. If Pods need to be updated or scaled in a controlled way, the Deployment will handle that.
 
+- [Deployments](#deployments)
+  - [Deployment creation](#deployment-creation)
+  - [Show deployment information](#show-deployment-information)
+  - [Deployment definition file](#deployment-definition-file)
+  - [Deletion](#deletion)
+  - [Rollup and rollback updates](#rollup-and-rollback-updates)
+  - [ReplicaSets](#replicasets)
+  - [Rollout strategy](#rollout-strategy)
+    - [Canary deployments](#canary-deployments)
+    - [Blue-green deployments](#blue-green-deployments)
+
+
+
 ## Deployment creation
 
 Create a manifest file with kubectl using the options **--dry-run=client -o yaml**
@@ -96,7 +109,7 @@ Deployments support updating images to a new version through a rolling update me
 To update your Deployment, run the following command:
 
 ```bash
-kubectl edit deployment hello
+$ kubectl edit deployment hello
 ```
 
 Change the image version in the containers section of the Deployment:
@@ -109,41 +122,31 @@ containers:
 ...
 ```
 
+## ReplicaSets
 
-### 1. Rollout history
-This will update the Deployment to your cluster and Kubernetes will begin a rolling update. To see the **rollout history**:
-
-```bash
-kubectl rollout history deployment/frontend
-```
-
-### 2. Rollout status
-Verify the **current state** of the rollout:
+A ReplicaSet is a process that runs multiple instances of a Pod and keeps the specified number of Pods constant. A Deployment is a higher abstraction that controls the release of a new version by managing one or more ReplicaSets. 
 
 ```bash
-kubectl rollout status deployment/frontend
+$ kubectl get rs -l app=web
+NAME                  DESIRED   CURRENT   READY   AGE
+frontend-5fb69bcb69   0         0         0       79m
+frontend-755969cb75   5         5         4       86m
+
+$ kubectl describe rs frontend-755969cb75 
+Name:           frontend-755969cb75
+Selector:       app=web,pod-template-hash=755969cb75
+Labels:         app=web
+...
+Controlled By:  Deployment/frontend
+Replicas:       5 current / 5 desired
+Pods Status:    5 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=web
+           pod-template-hash=755969cb75
+  Containers:
+...
 ```
 
-### 3. Rollout pause
-If you detect problems, **pause the running rollout** to stop the update:
-
-```bash
-kubectl rollout pause deployment/frontend
-```
-
-### 4. Rollout resume
-The rollout is paused which means that some pods are at the new version and some pods are at the older version. We can **continue the rollout** using the resume command.
-
-```bash
-kubectl rollout resume deployment/frontend
-```
-
-### 5. Rollout undo
-If a bug was detected in the new version, use the rollout command to **roll back** to the previous version:
-
-```bash
-kubectl rollout undo deployment/frontend
-```
 
 ## Rollout strategy
 
@@ -162,31 +165,11 @@ StrategyType:           RollingUpdate
 
 ```
 
-With **RollingUpdate** strategy, PODs are upgraded few at a time
+- With **RollingUpdate** strategy, PODs are upgraded few at a time
+- With **Recreate** all PODs are taken down before upgrading any. 
 
-all PODs are taken down before upgrading any.
 
-Find out what is happening in the current deployment rollout by showing the **status**:
-
-```bash
-$ kubectl rollout status deployment frontend
-deployment "frontend" successfully rolled out
-```
-
-Rollback a deployment with **undo** command:
-
-```bash
-$ kubectl rollout undo deployment frontend
-deployment.apps/frontend rolled back
-```
-
-Get the history of all rollouts
-
-```bash
-$ kubectl rollout history deployment frontend
-```
-
-## Canary deployments
+### Canary deployments
 
 When you want to test a new deployment in production with a subset of your users, use a canary deployment. Canary deployments allow you to release a change to a small subset of your users to mitigate risk associated with new releases.
 
@@ -194,7 +177,7 @@ If you want to ensure that a user didn't get served by the Canary deployment, ea
 
 You can do this by creating a service with session affinity. This way the same user will always be served from the same version. Add a new `sessionAffinity` field and set to `ClientIP`. All clients with the same IP address will have their requests sent to the same version of the hello application.
 
-```
+```yaml
 kind: Service
 apiVersion: v1
 metadata:
@@ -204,10 +187,11 @@ spec:
   ...
 ```
 
-## Blue-green deployments
+### Blue-green deployments
 
 Rolling updates are ideal because they allow you to deploy an application slowly with minimal overhead, minimal performance impact, and minimal downtime. There are instances where it is beneficial to modify the load balancers to point to that new version only after it has been fully deployed. In this case, blue-green deployments are the way to go.
 
 Kubernetes achieves this by creating two separate deployments; one for the **old "blue"** version and one for the **new "green"** version. Once the new "green" version is up and running, you'll switch over to using that version by updating the Service, which will act as the router.
 
 A major downside of blue-green deployments is that you will need to have at least 2x the resources in your cluster necessary to host your application.
+

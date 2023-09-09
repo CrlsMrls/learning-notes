@@ -2,6 +2,15 @@
 
 `namespaces` isolates groups of resources within a cluster.
 
+- [namespaces](#namespaces)
+  - [Namespace creation](#namespace-creation)
+  - [Creating resources in a specific namespace](#creating-resources-in-a-specific-namespace)
+  - [Common namespaces](#common-namespaces)
+    - [default](#default)
+    - [kube-system](#kube-system)
+    - [kube-public](#kube-public)
+  - [Get information on namespaces](#get-information-on-namespaces)
+
 ## Namespace creation
 
 ```bash
@@ -19,6 +28,29 @@ status: {}
 $ kubectl apply -f namespace-definition.yml
 namespace/dev-ns created
 ```
+
+## Creating resources in a specific namespace
+
+Add `.metadata.namespace: <namespace-name>` in the description file.
+
+```yaml
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: frontend
+  namespace: dev
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+```
+
+In the previous example, the pod will be created in the `dev` namespace.
+
 
 ## Common namespaces
 
@@ -62,7 +94,7 @@ dna-1   0/1     Completed   4 (62s ago)   52m11s
 dna-2   0/1     Completed   4 (59s ago)   52m11s
 ```
 
-Add `--all-namespaces` for getting resources in all namespaces.
+Add `--all-namespaces` or `-A` for listing resources in all namespaces.
 
 ```bash
 $ kubectl get pods --all-namespaces
@@ -74,22 +106,4 @@ kube-system     local-path-provisioner-64ffb68fd-c4h84   1/1     Running        
 kube-system     coredns-85cb69466-xb2vj                  1/1     Running            0             28m
 kube-system     metrics-server-9cf544f65-6zcpn           1/1     Running            0             28m
 ...
-```
-
-## Creating resorces in a specific namespace
-
-```yaml
-apiVersion: v1
-kind: Pod
-
-metadata:
-  name: frontend
-  namespace: dev
-  labels:
-    app: myapp
-    type: front-end
-spec:
-  containers:
-    - name: nginx-container
-      image: nginx
 ```

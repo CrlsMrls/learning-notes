@@ -9,6 +9,7 @@ Pods also share a network namespace. This means that there is one IP Address per
 - [Pods](#pods)
   - [Pod lifecycle](#pod-lifecycle)
   - [Pod creation](#pod-creation)
+  - [Multi-container pods](#multi-container-pods)
 
 
 ## Pod lifecycle
@@ -79,7 +80,7 @@ $ kubectl create -f definition.yml
 pod/front-ui created
 ```
 
-Although it is better to always use **apply**. Modifying an already created resource from a definition file requires **apply** instead of reusing **create**.
+Although when possible, it is better to always use **apply**. Modifying an already created resource from a definition file requires **apply** instead of reusing **create**.
 
 ```bash
 $ kubectl create -f definition.yml
@@ -88,3 +89,21 @@ Error from server (AlreadyExists): error when creating "definition.yml": pods "f
 $ kubectl apply -f definition.yml
 pod/front-ui configured
 ```
+
+## Multi-container pods
+
+Multi-container patterns help the main container, these are the most common patterns: 
+- A **sidecar** container performs some task that helps the main container.
+- An **ambassador** container proxies network traffic to and/or from the main container.
+- An **adapter** container transforms the main container's output.
+
+https://kubernetes.io/blog/2015/06/the-distributed-system-toolkit-patterns/
+
+**Init containers** could be also considered as multi-container pods, with the particularity that they do not run in parallel: init containers stop working once they finish their execution.
+
+Multi-container pods allow coupled containers to share resources. All containers in the Pod:
+- can access the shared volumes, allowing those containers to share data. 
+- share the network namespace, including the IP address and network ports. Inside a Pod, the containers can communicate with one another using `localhost`. 
+- can share the standard inter-process communications (IPC)
+
+
