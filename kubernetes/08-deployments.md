@@ -12,9 +12,9 @@ The main benefit of Deployments is in abstracting away the low level details of 
   - [Rollup and rollback updates](#rollup-and-rollback-updates)
   - [ReplicaSets](#replicasets)
   - [Rollout strategy](#rollout-strategy)
+    - [RollingUpdate vs Recreate](#rollingupdate-vs-recreate)
     - [Canary deployments](#canary-deployments)
     - [Blue-green deployments](#blue-green-deployments)
-
 
 
 ## Deployment creation
@@ -147,6 +147,7 @@ Pod Template:
 ...
 ```
 
+More information about ReplicaSets in [ReplicaSets](./replica-sets.md)
 
 ## Rollout strategy
 
@@ -162,11 +163,13 @@ Annotations:            deployment.kubernetes.io/revision: 1
 Selector:               name=webapp
 Replicas:               4 desired | 4 updated | 4 total | 4 available | 0 unavailable
 StrategyType:           RollingUpdate
-
 ```
 
-- With **RollingUpdate** strategy, PODs are upgraded few at a time
-- With **Recreate** all PODs are taken down before upgrading any. 
+### RollingUpdate vs Recreate
+
+- **RollingUpdate** is the default strategy, PODs are upgraded few at a tim. It is useful for ensuring zero downtime during the update process. However, the side effect of this approach is two versions of the container are running at the same time.
+
+- **Recreate** strategy: all PODs are taken down before upgrading any. This strategy is useful when you want to ensure that **only one version** of the container is running at a time. However, the side effect of this approach is that **there is downtime** during the update process.
 
 
 ### Canary deployments
@@ -195,3 +198,4 @@ Kubernetes achieves this by creating two separate deployments; one for the **old
 
 A major downside of blue-green deployments is that you will need to have at least 2x the resources in your cluster necessary to host your application.
 
+More details on [Updating deployment](./09-updating-deployment.md).

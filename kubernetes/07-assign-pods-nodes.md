@@ -130,7 +130,8 @@ There can be multiple taints on the same node and multiple tolerations on the sa
 - `NoSchedule`: Kubernetes will not schedule new pods onto a node. 
 - `NoExecute`: the pod will be evicted from the node (if it is already running on the node), and will not be scheduled onto the node (if it is not yet running on the node).
 
-### Use case for taints
+### Full example of applying taints
+
 Example, a node has a GPU, we want to protect this node from running pods that are not GPU specific.
 
 ```bash
@@ -147,6 +148,15 @@ $ kubectl taint nodes node01 type=gpu:NoSchedule
 node/node01 tainted
 ```
 
+The node has now a taint with the taint effect `NoSchedule`, which means that no pod can be scheduled on this node unless it has a matching toleration.
+
+To remove the taint, use the `-` sign:
+
+```bash
+$ kubectl taint nodes node01 type=gpu:NoSchedule-
+node/node01 untainted
+```
+
 Check taint is correctly applied:
 
 ```bash
@@ -160,7 +170,7 @@ Taints:             type=gpu:NoSchedule
 (...)
 ```
 
-If we want to run a pod the pod won't start and stay in `Pending` state
+If the pod can't be assigned to a node, it will stay in `Pending` state:
 
 ```bash
 $ kubectl run nginx --image=nginx

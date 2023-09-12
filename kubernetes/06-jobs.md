@@ -78,7 +78,7 @@ spec:
 
 As Jobs are run in a Pod, debugging is similar to pods. 
 
-- get the job completion
+- get the job completion information
 - describe the job. `Pods Statuses` lists when the Job fails and how many times.
 - find the pod name and describe the pod
 - if the pod created some content, check it with the logs
@@ -134,7 +134,19 @@ job.batch "my-job" deleted
 After fixing it, the status should be `Completed`.
 
 ```bash
-$ kubectl get pods
+$ kubectl get pods my-job-9nb88
 NAME           READY   STATUS      RESTARTS   AGE
-my-job-9nb88   0/1     Completed   0          4s
+my-job-9nb88   0/1     Completed   0          3h
+
+$ kubectl get job my-job 
+NAME     COMPLETIONS   DURATION   AGE
+my-job   1/1           82s        3h
+
+$ kubectl describe job my-job 
+Name:             my-job
+...
+Duration:         82s
+Pods Statuses:    0 Active (0 Ready) / 1 Succeeded / 0 Failed
+Pod Template:
+...
 ```
