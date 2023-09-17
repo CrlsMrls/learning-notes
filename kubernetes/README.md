@@ -8,7 +8,7 @@
 - [Services](./services.md)
 - [Replica Sets](./replica-sets.md)
 - [Pods](./pods.md)
-- [Config maps](./configmaps.md)
+- [ConfigMap](./12-configmaps.md) 
 - [Taints](./taints.md)
 - [Assigning Pods to Nodes](./assign-pods-nodes.md)
 - [Helm](./helm.md)

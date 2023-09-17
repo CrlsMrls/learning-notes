@@ -1,6 +1,8 @@
 # Nodes
 
-A node may be a virtual or physical machine, depending on the cluster. Each node is managed by the control plane and contains the services necessary to run Pods: `kubelet`, `kube-proxy` and a container runtime
+A node may be a virtual or physical machine, depending on the cluster. Each node is managed by the control plane and contains the services necessary to run Pods: `kubelet`, `kube-proxy` and a container runtime.
+
+Aliases: `nodes` and `no`
 
 - [Nodes](#nodes)
   - [Get information on nodes](#get-information-on-nodes)

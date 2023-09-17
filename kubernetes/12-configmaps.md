@@ -1,21 +1,5 @@
 # Configmaps
 
-- [Configmaps](#configmaps)
-  - [Definitions](#definitions)
-  - [Describe the ConfigMap](#describe-the-configmap)
-    - [List configmaps:](#list-configmaps)
-    - [Get information from one:](#get-information-from-one)
-    - [Print detailed description with `describe`:](#print-detailed-description-with-describe)
-  - [Creation](#creation)
-    - [From literal values](#from-literal-values)
-    - [From a file](#from-a-file)
-    - [From a environment variables file](#from-a-environment-variables-file)
-  - [Consuming ConfigMaps in Pods](#consuming-configmaps-in-pods)
-    - [ConfigMap as one specific file](#configmap-as-one-specific-file)
-
-
-## Definitions
-
 ConfigMaps allow to decouple the environment-specific configuration from the containerized applications. 
 
 - The data stored in a ConfigMap cannot exceed 1 MiB.
@@ -29,6 +13,21 @@ ConfigMaps allow to decouple the environment-specific configuration from the con
   - configuration files in a volume.
 
 Aliases: `configmap`, `cm`
+
+- [Configmaps](#configmaps)
+  - [Describe the ConfigMap](#describe-the-configmap)
+    - [List configmaps:](#list-configmaps)
+    - [Show the data from a ConfigMap:](#show-the-data-from-a-configmap)
+  - [Creation](#creation)
+    - [1. From literal values](#1-from-literal-values)
+    - [2. From a file](#2-from-a-file)
+    - [3. From a directory](#3-from-a-directory)
+    - [4. From an environment variables file](#4-from-an-environment-variables-file)
+  - [Consuming ConfigMaps](#consuming-configmaps)
+    - [1. Individual environment variables](#1-individual-environment-variables)
+    - [2. List of environment variables from a file](#2-list-of-environment-variables-from-a-file)
+    - [3. ConfigMap as a volume](#3-configmap-as-a-volume)
+    - [4. ConfigMap as one specific file](#4-configmap-as-one-specific-file)
 
 ## Describe the ConfigMap 
 

@@ -4,6 +4,8 @@ A Deployment provides declarative updates for Pods and ReplicaSets. They provide
 
 The main benefit of Deployments is in abstracting away the low level details of managing Pods. Behind the scenes Deployments use [Replica Sets](replica-sets.md) to manage starting and stopping the Pods. If Pods need to be updated or scaled in a controlled way, the Deployment will handle that.
 
+Aliases: `deployments` and `deploy`
+
 - [Deployments](#deployments)
   - [Deployment creation](#deployment-creation)
   - [Show deployment information](#show-deployment-information)

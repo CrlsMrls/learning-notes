@@ -45,6 +45,13 @@
 
 ## Secrets
 
+## Volumes
+
+- 
+- Replace `hostPath` configured earlier with the newly created `PersistentVolumeClaim`.
+  - generate traffic and check the logs
+  - what is the Retain Policy of the `PersistentVolume`? What happens if you delete the pod? What happens if you delete the `PersistentVolume`?
+
 ## Security Contexts and user privileges
 
 ## Service accounts

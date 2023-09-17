@@ -2,6 +2,8 @@
 
 `namespaces` isolates groups of resources within a cluster.
 
+Aliases: `namespaces` and `ns`
+
 - [namespaces](#namespaces)
   - [Namespace creation](#namespace-creation)
   - [Creating resources in a specific namespace](#creating-resources-in-a-specific-namespace)

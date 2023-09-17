@@ -4,6 +4,8 @@ Replica sets guarantee a number of identical Pods are running. They handle resta
 
 Deployments are normally used instead of Replica Sets, as they provide more features and flexibility. Deployments use Replica Sets behind the scenes.
 
+Aliases: `replicasets` and `rs`
+
 - [Replica sets](#replica-sets)
   - [Definition file](#definition-file)
   - [Getting information](#getting-information)

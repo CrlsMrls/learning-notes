@@ -5,17 +5,14 @@ The scheduler watches for newly created pods with no assigned node, and selects 
 - **Node affinity** is conceptually similar to `nodeSelector`, allowing more complex rules.
 - Kubernetes **taints** are used to repel pods from nodes. Taints are applied to nodes and **tolerations** are applied to pods.
 
-
-Content:
 - [Assigning Pods to Nodes](#assigning-pods-to-nodes)
   - [Node Selector](#node-selector)
   - [Affinity](#affinity)
   - [Taints](#taints)
     - [Type of Taints](#type-of-taints)
-    - [Use case for taints](#use-case-for-taints)
+    - [Full example of applying taints](#full-example-of-applying-taints)
     - [Create Tolerations](#create-tolerations)
     - [Remove taints](#remove-taints)
-
 
 ## Node Selector
 

@@ -2,6 +2,8 @@
 
 A Job creates one or more Pods and will continue to retry execution of the Pods until a specified number of them successfully terminate. 
 
+Aliases: `jobs` and `job`
+
 - [Jobs](#jobs)
   - [Creation](#creation)
   - [Repeat until failure](#repeat-until-failure)

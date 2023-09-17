@@ -6,6 +6,8 @@ Pods also have Volumes. Volumes are data disks that live as long as the pods liv
 
 Pods also share a network namespace. This means that there is one IP Address per pod.
 
+Aliases: `pods` and `po`
+
 - [Pods](#pods)
   - [Pod lifecycle](#pod-lifecycle)
   - [Pod creation](#pod-creation)

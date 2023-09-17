@@ -52,18 +52,6 @@
 
 ### Basics (ML + DL + NLP)
 
-|         |10h/week | 20h/week   |
-|---------|---------|----------  |
-|ML       |1 Feb - 2| 1 Ene  (1) |
-|DL       |1 Jun - 4| 1 Mar  (2) |
-|NLP      |1 Oct - 3| 1 Jun  (2) |
-|TF Cert  |1 Dic - 2| 15 Jul (1) |
-|TF Depl  |1 Ene - 1| 15 Ago (.5)|
-|TF Adv   |1 Abr - 3| 1 Oct  (2) |
-|MLOps    |1 Jun - 2| 1 Nov  (1) |
-|MLOps GCP|1 Jun - 2| 1 Nov  (2) |
-
-
 - [Machine Learning Specialization](https://www.coursera.org/specializations/machine-learning-introduction) 
 
   - **Time**: 3 months (9 hours/week) vs. 2.5 months (5 hours/week) - 108 vs. 50 = 79h
