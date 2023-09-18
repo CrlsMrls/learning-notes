@@ -13,8 +13,7 @@
   - [Networking](#networking)
     - [Container Network Interface (CNI)](#container-network-interface-cni)
     - [Pod-to-Pod Communication](#pod-to-pod-communication)
-
-
+  - [References](#references)
 
 ## History
 Kubernetes is inspired by Borg - the internal system used by Google to manage its applications (e.g. Gmail, Apps, GCE). To learn more about the ideas behind Kubernetes read the "[Large-Scale Cluster Management at Google with Borg](https://research.google/pubs/pub43438/)" paper. 
@@ -22,10 +21,10 @@ Kubernetes is inspired by Borg - the internal system used by Google to manage it
 Borg has inspired current data center systems, as well as the underlying technologies used in container runtime today: Google contributed `cgroups` to the Linux kernel in 2007; it limits the resources used by collection of processes. Both `cgroups` and Linux `namespaces` are at the heart of containers today, including Docker.
 
 ## Kubernetes Architecture
-****
+
 Kubernetes is made of one or more central managers (aka master nodes) and worker nodes. 
 
-![Kubernetes Architecture](./Kubernetes_Architecture.png "Kubernetes Architecture")
+![Kubernetes Architecture](./01-architecture.png "Kubernetes Architecture")
 
 ### Master Node
 The manager runs an API server, a scheduler, various operators and a datastore to keep the state of the cluster, container settings, and the networking configuration.
@@ -107,3 +106,12 @@ To provide container networking, Kubernetes is standardizing on the [Container N
 While a CNI plugin can be used to configure the network of a pod and provide a single IP per pod, CNI does not help you with pod-to-pod communication across nodes. This is where a pod network comes in. A pod network is a network overlay that allows pods to communicate with each other across nodes. It is a virtual network that is created on top of the CNI network.
 
 Basically, all IPs involved (nodes and pods) are routable without NAT. This can be achieved at the physical network infrastructure if you have access to it (e.g. GKE). Or, this can be achieved with a software defined overlay with solutions like other pod network solutions, such as Calico, Flannel, Weave Net, and more. Each solution has its own pros and cons. For example, Calico uses BGP to route traffic between nodes, while Flannel uses VXLAN.
+
+****
+## References
+
+- [Kubernetes Documentation](https://kubernetes.io/docs/home/)
+- [Kubernetes Concepts](https://kubernetes.io/docs/concepts/)
+- [Kubernetes API Reference](https://kubernetes.io/docs/reference/kubernetes-api/)
+- [Borg, Omega, and Kubernetes](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/44843.pdf), Lessons learned from three container management systems over a decade.
+- [Ilustrated Guide to Kubernetes Networking](https://speakerdeck.com/thockin/illustrated-guide-to-kubernetes-networking) by Tim Hockin 

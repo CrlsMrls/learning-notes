@@ -223,6 +223,7 @@ Notes.
 - The `mountPath` must be an absolute path. 
 - The destination folder must exist in the container image. 
 - All files from the destination folder are removed and replaced by the ConfigMap.
+
 ### 4. ConfigMap as one specific file
 
 The `volumeMounts.subPath` property specifies a sub-path inside the referenced volume instead of its root.
@@ -275,8 +276,6 @@ http {
     }
 }
 ```
-
-
 
 
 To modify a pod usage of Configmaps, you must recreate the pod

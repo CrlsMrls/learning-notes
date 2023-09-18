@@ -10,6 +10,7 @@ Aliases: `replicasets` and `rs`
   - [Definition file](#definition-file)
   - [Getting information](#getting-information)
   - [Scale up and down](#scale-up-and-down)
+  - [References](#references)
 
 ## Definition file
 
@@ -90,3 +91,7 @@ Scaling up/down replicas can be done directly, without modifying the specificati
 ```bash
 $ kubectl scale rs new-replica-set --replicas=5
 ```
+
+## References
+
+- [Replica Sets](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)

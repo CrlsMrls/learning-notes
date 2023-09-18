@@ -23,20 +23,19 @@ The **Container Storage Interface (CSI)** is a standard for exposing arbitrary b
 - Each volume can be mounted in one or more containers in the Pod. The `spec.containers.<container>.volumeMounts` field in the container spec mounts a volume to a specific container's filesystem at a specific location.
 - The same volume can be mounted in multiple containers. There is nothing preventing multiple containers from overwriting each other's data in the volume, locking or versioning the data is the responsibility of the application. To prevent data corruption, the containers should not write to the same file in the volume.
 
-
 ## Volume types
 
-There are several types that you can use to define volumes, each with their pros and cons. The most important types are:
+There are several volume types, each with their pros and cons. The most important types are:
 
 ### 1. EmptyDir
 
 `emptyDir` volumes provide temporary storage that uses the host file system and are removed when Pod is deleted. The kubelet will create the directory in the container, but not mount any storage. As a result, the initial directory is empty. 
 
-The `emptyDir` volumes can be used to share files between containers in a Pod.
+The `emptyDir` volumes is normally used to share files between containers in a Pod.
 
 The data in an `emptyDir` volume is safe across container restarts (container crashes), but is lost when the Pod is deleted or the node is rebooted. 
 
-The `emptyDir` types can be:
+The `emptyDir` includes the following fields:
 - `Medium` - The `Medium` field defines the type of storage (disk, SSD, network storage, etc.) . The default is `""`, which uses the node's default storage medium. The other options are `Memory` (for a `tmpfs` RAM-backed filesystem) and `HugePages`.
 - `SizeLimit` - The `SizeLimit` field defines the maximum size of the volume. The default is `nil`, which means that the volume can be as large as the node's free disk space. The other option is a size limit, such as `1Gi` or `100Mi`.
 
