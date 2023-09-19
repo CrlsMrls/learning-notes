@@ -28,10 +28,10 @@ Roles and RoleBindings can be used with other objects, such as users and groups.
 ## Authorization process
 
 The authorization process is the following:
-- 1. Create a `ServiceAccount` object. See [Service accounts](#service-accounts).
-- 2. Create a `Role` or `ClusterRole` object with the desired permissions. See [Role-based access control (RBAC)](#role-based-access-control-rbac).
-- 3. Create a `RoleBinding` or `ClusterRoleBinding` object to bind the role (with the permissions) to the service account. See [Role-based access control (RBAC)](#role-based-access-control-rbac).
-- 4. Attach the service account to a pod. See [Attach service account to a pod](#attach-service-account-to-a-pod).
+1. Create a `ServiceAccount` object. See [Service accounts](#service-accounts).
+2. Create a `Role` or `ClusterRole` object with the desired permissions. See [Role-based access control (RBAC)](#role-based-access-control-rbac).
+3. Create a `RoleBinding` or `ClusterRoleBinding` object to bind the role (with the permissions) to the service account. See [Role-based access control (RBAC)](#role-based-access-control-rbac).
+4. Attach the service account to a pod. See [Attach service account to a pod](#attach-service-account-to-a-pod).
 
 ## Service accounts
 
@@ -47,16 +47,16 @@ Prior to version 1.24, service accounts were stored in long-lived secrets (no ex
 
 ### Service account lifecycle
 
-- 1. Creation:
+1. Creation:
   - Each namespace has a `default` service account, which is created automatically when the namespace is created.
   - When additional service accounts are created, the API server generates new tokens for each one.
-- 2. Granting permissions:
+2. Granting permissions:
   - Different permissions are granted to the service account using [role-based access control (RBAC)](#role-based-access-control-rbac).
-- 3. Usage:
+3. Usage:
   - To assign the token to a pod, the service account must be specified in the pod definition using the `.spec.serviceAccountName` property. If not specified, the `default` service account is used.
   - The token is mounted in the pod as a file at `/var/run/secrets/kubernetes.io/serviceaccount/token`. Applications can read the token from this file. 
   - To opt out of automounting the API credentials, use the `automountServiceAccountToken: false` property in the pod definition or in the service account definition.
-- 4. Expiration:
+4. Expiration:
   - The short-lived tokens have default expiration time of 1 hour.
   - These tokens are automatically renewed by the API server when they expire.
   - The expiration time can be changed using the `--service-account-token-ttl` flag when starting the API server.
@@ -109,7 +109,9 @@ spec:
 To test the service account, you could access the pod and run the `curl` command to access the API server:
 
 ```bash
-$ curl https://kubernetes/api/v1/namespaces/default/pods --header "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+$ curl https://kubernetes/api/v1/namespaces/default/pods \
+--header "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+--cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 ```
 
 Without granting permissions to the service account, the request will fail with a `403 Forbidden` error. This is done with the RBAC API, as explained in the next section. 
@@ -155,23 +157,33 @@ rules:
 
 The previous cluster role example defines extensive permissions for pods. 
 
-On the other hand, the following role definition grants permissions to only list pods in the `default` namespace:
+On the other hand, the following role definition grants permissions to **only** list pods in the `default` namespace:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: list-pods-role
+  name: view-pods-role
   namespace: default
 rules:
-- apiGroups: [""]
+- apiGroups: [""] # = core API group
   resources: ["pods"]
-  verbs: ["list"]
+  verbs: ["list", "get", "watch"]
+```
+
+The imperative command to create the previous example role is the following:
+
+```bash
+$ kubectl create role view-pods-role --verb=list,get,watch --resource=pods
 ```
 
 ### RoleBinding and ClusterRoleBinding
 
-Following the previous examples, the following `ClusterRoleBinding` object grants the `manager-sa` service account the `pod-manager` cluster role:
+Role bindings have essentially the two parts that are being bound:
+- The role (or cluster role) that defines the permissions.
+- One or more subjects that will be granted the permissions. This document focuses on service accounts, but other subjects can be used, such as `User` and `Group`.
+
+Following the previous examples, the following `ClusterRoleBinding` object grants the `manager-sa` service account with extensive permissions for managing pods (defined in the `pod-manager` cluster role):
 
 
 ```yaml
@@ -188,7 +200,7 @@ subjects:
   name: manager-sa # must match the service account name
 ```
 
-The following example grants the `manager-sa` service account the `list-pods-role` role in the `default` namespace:
+The following example grants the `view-pods-role` role in the `default` namespace to the `dashboard-sa` service account:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -199,22 +211,25 @@ metadata:
 roleRef:
   kind: Role
   apiGroup: rbac.authorization.k8s.io
-  name: list-pods-role # must match the role name above
+  name: view-pods-role # must match the role name above
 subjects:
 - kind: ServiceAccount
   name: dashboard-sa
   namespace: default # must match the namespace where the service account is created
 ```
 
-Alternatively, the `RoleBinding` can be created using the `kubectl create rolebinding` command:
+Alternatively, these objects can be created using the `kubectl create` command:
 
 
 ```bash
-$ kubectl create rolebinding dashboard-sa-view-binding --role=list-pods-role --serviceaccount=default:dashboard-sa
+$ kubectl create rolebinding dashboard-sa-view-binding \
+  --role=view-pods-role \
+  --serviceaccount=default:dashboard-sa
 rolebinding.rbac.authorization.k8s.io/dashboard-sa-view-binding created
 ```
 
-The previous command binds the `dashboard-sa` service account with the permissions to list pods in the `default` namespace.
+In the previous command, the `RoleBinding` object bound the `view-pods-role` role to the `dashboard-sa` service account in the `default` namespace.
+
 
 ****
 ## References
