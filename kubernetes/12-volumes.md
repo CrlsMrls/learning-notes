@@ -100,19 +100,19 @@ spec:
 
 ConfigMaps allow to store configuration data in key-value pairs. 
 
-Check the [ConfigMap](./12-configmaps.md) document.
+Check the [ConfigMap](./13-configmaps.md) document.
 
 ### 4. Secret
 
 Secrets objects allow to store and manage sensitive information, such as passwords, OAuth tokens, and ssh keys. 
 
-Check the [Secret](./13-secrets.md) document.
+Check the [Secret](./14-secrets.md) document.
 
 ### 5. Persistent Volumes and Claims
 
 The `PersistentVolume` (PV) and `PersistentVolumeClaim` (PVC) objects provide a way to use persistent storage with Kubernetes. 
 
-Check the [Persistent Volumes and Claims](./14-persistent-volumes.md) document.
+Check the [Persistent Volumes and Claims](./15-persistent-volumes.md) document.
 
 ### 6. NFS and iSCSI
 
