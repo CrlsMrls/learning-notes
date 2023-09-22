@@ -27,7 +27,7 @@
 
 ## Deployments
 - Create a deployment called `web` with `nginx:1.17` image and 5 replicas
-  - init container prints hostname, system info (`uname -a`) and long output of nginx version (`nginx -V`) into `/usr/share/nginx/html/index.html`
+  - `busybox` init container prints `hostname` and system info (`uname -a`) into `/usr/share/nginx/html/index.html`
   - upgrade to `nginx:1.24-alpine` and new tag `v2` with rolling update
   - check history, export both versions' history to file `one.out` and `two.out`, `diff` both files.
   - upgrade to an invalid version `nginx:91.1`
@@ -37,10 +37,30 @@
   - upgrade to `nginx:1.25.2-alpine3.18` and tag `v3`
 
 ## ConfigMaps
+- from literal - Curl a remote URL and store the result in a file
+  - Create a config map `cm-env` with a literal value `REMOTE_URL=http://www.google.com`
+  - Create a pod with image `alpine/curl`
+  - Add a volume with external hostPath volume to `/var/log/curl/` and mount it to `/tmp/`
+  - Execute `curl $REMOTE_URL` and store it to `/tmp/result-curl.txt`
+  - check the file in the host
+
+- from directory - Create nginx web server to display files from the config maps
+  - Create in a directory the files: `index.html` with the content `Hello world!` and `bye.html` with `Bye world!`
+  - Create a config map `cm-dir` with previous directory
+  - Create a pod with image `nginx` expose port `80`
+  - Add previous config map as volume to `/usr/share/nginx/html/`
+  - curl the pod and check the output of both files
+
+- from file - Create nginx web server to display configuration from the config map using
+  - a literal value -> configure and print a value using ENV
+    - init container prints `env` into `/usr/share/nginx/html/env.html`
+  - a literal value -> list of values using config map data
+  - directory of files
+
 - Create nginx web server to display configuration from the config map using
   - a literal value -> configure and print a value using ENV
+    - init container prints `env` into `/usr/share/nginx/html/env.html`
   - a literal value -> list of values using config map data
-  - a file
   - directory of files
 
 ## Secrets

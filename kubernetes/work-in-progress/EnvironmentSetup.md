@@ -7,14 +7,19 @@ Create a `.vimrc` file and the following lines for working with YAML files:
 ```bash
 $ cat ~/.vimrc
 
-set number
-set ai et tb=2 sw=2
+set nu ai et tb=2 sw=2
 ```
+
 - `nu`: show line numbers
 - `ai`: autoindent: when go to new line keep same indentation
 - `et` or `expandtab`: use spaces for tab
 - `tb=2` or `tabstop=2`: amount of spaces used for tab
 - `sw=2` or `shiftwidth=2`: amount of spaces used during indentation
+
+## Tmux
+
+- Turn on mouse support: by pressing `Ctrl+b` followed by `:` and then type `setw -g mouse on`
+- Split vertically by pressing `Ctrl+b` followed by `%`
 
 ## Bash aliases
 
@@ -33,6 +38,8 @@ complete -F __start_kubectl ka # autocomplete k
 # kubectl definition - to get yaml object instead of applying the changes
 alias kd="kubectl describe"
 complete -F __start_kubectl kd
+
+alias kco
 EOF
 
 source .bashrc
