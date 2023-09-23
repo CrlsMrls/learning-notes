@@ -139,3 +139,31 @@ spec:
   restartPolicy: Always
 status: {}
 ```
+
+## Kubeconfig
+
+The `kubectl` takes the configuration from the `~/.kube/config` file. This file can be changed with the `--kubeconfig` flag.
+
+The kube config file is used to configure access to Kubernetes clusters. It contains:
+- Cluster information
+- User information
+- Context information
+- Current context
+
+The `kubectl config view` command shows the current configuration.
+
+## Switching context
+
+To use a different context, in this example `research`, run the command: `kubectl config use-context research`
+
+To know the current context, run the command: `kubectl config current-context`
+
+In order to validate if a user can perform an action, use the `--as` flag:
+
+```bash
+kubectl get pods --as dev-user
+```
+
+## References
+
+- [kubectl Cheat Sheet - Kubectl context and configuration](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-context-and-configuration)

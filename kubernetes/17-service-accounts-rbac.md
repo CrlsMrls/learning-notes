@@ -23,6 +23,7 @@ Roles and RoleBindings can be used with other objects, such as users and groups.
     - [Defining permissions](#defining-permissions)
     - [Role and ClusterRole](#role-and-clusterrole)
     - [RoleBinding and ClusterRoleBinding](#rolebinding-and-clusterrolebinding)
+  - [Identifying the API group of a resource](#identifying-the-api-group-of-a-resource)
   - [References](#references)
 
 ## Authorization process
@@ -174,7 +175,7 @@ rules:
 The imperative command to create the previous example role is the following:
 
 ```bash
-$ kubectl create role view-pods-role --verb=list,get,watch --resource=pods
+$ kubectl create role view-pods-role --verb=list,get,watch --resource=pods --namespace=default
 ```
 
 ### RoleBinding and ClusterRoleBinding
@@ -224,11 +225,37 @@ Alternatively, these objects can be created using the `kubectl create` command:
 ```bash
 $ kubectl create rolebinding dashboard-sa-view-binding \
   --role=view-pods-role \
-  --serviceaccount=default:dashboard-sa
+  --serviceaccount=default:dashboard-sa \
+  --namespace=default
 rolebinding.rbac.authorization.k8s.io/dashboard-sa-view-binding created
 ```
 
 In the previous command, the `RoleBinding` object bound the `view-pods-role` role to the `dashboard-sa` service account in the `default` namespace.
+
+## Identifying the API group of a resource
+
+In order to find the resource API group, use the `kubectl api-resources` command:
+
+```bash
+kubectl api-resources --sort-by name
+NAME                              SHORTNAMES   APIVERSION                             NAMESPACED   KIND
+addons                                         k3s.cattle.io/v1                       true         Addon
+apiservices                                    apiregistration.k8s.io/v1              false        APIService
+bindings                                       v1                                     true         Binding
+certificatesigningrequests        csr          certificates.k8s.io/v1                 false        CertificateSigningRequest
+clusterrolebindings                            rbac.authorization.k8s.io/v1           false        ClusterRoleBinding
+clusterroles                                   rbac.authorization.k8s.io/v1           false        ClusterRole
+configmaps                        cm           v1                                     true         ConfigMap
+controllerrevisions                            apps/v1                                true         ControllerRevision
+cronjobs                          cj           batch/v1                               true         CronJob
+(...)
+```
+
+Check the following examples:
+- The resource `bindings` is in the `v1` API group. The `apiGroups` property value for this resource should be `[""]`. The same goes for the `configmaps` resource.
+- For the `cronjobs` resource, the `apiGroups` property value should be `["batch"]`.
+- For the `Role` and `ClusterRole`, the `apiGroups` property value should be `["rbac.authorization.k8s.io"]`.
+- etc.
 
 
 ****
