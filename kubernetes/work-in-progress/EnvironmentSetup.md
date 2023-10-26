@@ -8,6 +8,9 @@ Create a `.vimrc` file and the following lines for working with YAML files:
 $ cat ~/.vimrc
 
 set nu ai et tb=2 sw=2
+set ruler
+set syntax on 
+color murphy
 ```
 
 - `nu`: show line numbers
@@ -15,6 +18,9 @@ set nu ai et tb=2 sw=2
 - `et` or `expandtab`: use spaces for tab
 - `tb=2` or `tabstop=2`: amount of spaces used for tab
 - `sw=2` or `shiftwidth=2`: amount of spaces used during indentation
+- `ruler`: show cursor position
+- `syntax on`: enables syntax highlighting
+- `color murphy` To cycle through available color schemes, type the `:color` command, space then the `Tab` key. Continue to tap `Tab` to cycle.
 
 ## Tmux
 
