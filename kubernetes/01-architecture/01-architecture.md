@@ -75,6 +75,17 @@ Pods can communicate with each other using:
 
 Containers in a Pod are started in parallel by default. As a result, there is no way to determine which container becomes available first inside a Pod. `initContainers` can be used to ensure some containers are ready before others in a pod. 
 
+Multi-container patterns help the main container, these are the most common patterns: 
+- A **sidecar** container performs some task that helps the main container.
+- An **ambassador** container proxies network traffic to and/or from the main container.
+- An **adapter** container transforms the main container's output.
+
+Multi-container pods allow tightly coupled containers to share resources. All containers in the Pod:
+- can access the shared volumes, allowing those containers to share data. 
+- share the network namespace, including the IP address and network ports. Inside a Pod, the containers can communicate with one another using `localhost`. 
+
+https://kubernetes.io/blog/2015/06/the-distributed-system-toolkit-patterns/
+
 ### Service
 A service is a logical abstraction for a set of pods and a policy by which to access them, such as a single NodePort or a LoadBalancer to distribute inbound requests among many Pods. It is a stable endpoint to connect to a pod or a set of pods. 
 

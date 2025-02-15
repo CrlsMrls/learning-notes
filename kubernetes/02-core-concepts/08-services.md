@@ -8,9 +8,6 @@ Depending on the Service type, the Service can be accessed from inside the clust
 
 Aliases: `service` or `services`
 
-
-
-
 ## Service types
 
 There are four types of Services:

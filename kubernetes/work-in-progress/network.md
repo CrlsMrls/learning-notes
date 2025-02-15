@@ -13,7 +13,7 @@ The application's Deployment is called hive-io-frontend and exists in the hive N
 
 The application's web server listens on port 80. Create a Service called hive-io-frontend-svc to expose this application on port 8080. The Service only needs to expose the application within the cluster network.
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -40,7 +40,7 @@ Configure the application use hive.io for the domain. The lab server already has
 
 Remember that the application's Service listens on port 8080.
 
-```
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
