@@ -28,7 +28,7 @@ sudo apt-get install trivy
 To scan a Docker image using Trivy, use the following command:
 
 ```bash
-$  trivy image --severity HIGH --output /root/python.json --format json public.ecr.aws/docker/library/python:3.13-bullseye 
+$  trivy image --severity HIGH --output python.json --format json public.ecr.aws/docker/library/python:3.13-bullseye 
 INFO    [vuln] Vulnerability scanning is enabled
 INFO    [secret] Secret scanning is enabled
 INFO    Detected OS     family="debian" version="11.11"
@@ -51,4 +51,6 @@ $  head python.json
 
 In the example above, Trivy scans the `public.ecr.aws/docker/library/python:3.13-bullseye` image for vulnerabilities with a severity level of `HIGH` and outputs the results in JSON format to the `python.json` file.
 
+## 📚 References
 
+- [Trivy Official Documentation](https://trivy.dev/latest/docs/)

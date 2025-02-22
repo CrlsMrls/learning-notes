@@ -64,7 +64,7 @@ $ syft scan docker.io/nginx:latest -o cyclonedx-json > nginx-cyclonedx.json
    └── ✔ Executables                     [842 executables]
 ```
 
-The previous command will generate an SPDX format file. Other possible formats include: cyclonedx-json, cyclonedx-xml, github-json, spdx-json, spdx-tag-value, syft-json, syft-table, syft-text and template
+The previous command will generate an SPDX format file. Other possible formats include:  `cyclonedx-json`, `cyclonedx-xml`, `github-json`, `spdx-json`, `spdx-tag-value`, `syft-json`, `syft-table`, `syft-text and template`
 
 
 ## Grype
@@ -101,3 +101,7 @@ Similarly, you can generate an SBOM in CycloneDX format using the following comm
    └── by status:   22 fixed, 147 not-fixed, 0 ignored 
 ```
 
+## 📚 References
+
+- [Syft GitHub](https://github.com/anchore/syft)
+- [Grype GitHub](https://github.com/anchore/grype)

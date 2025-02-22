@@ -1,10 +1,34 @@
-# Network
+# NetworkPolicy
 
 - If a Pod is not selected by any NetworkPolicies, it is non-isolated. All traffic (incoming and outgoing) will be allowed.
 - NetworkPolicies allows to control network access within the cluster network, only allowing the traffic that is needed.
 - The empty podSelector will apply the NetworkPolicy to all Pods in the same Namespace as the NetworkPolicy.
 
 NodePort Services are exposed externally by listening on a port on all cluster nodes.
+
+## Create a basic NetworkPolicy
+
+To only allow traffic within a namespace and deny all traffic comming from other namespaces:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: prod-netpol
+  namespace: prod
+spec:
+  podSelector: {}       # apply to all pods in prod namespace
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector: {}                        # any pod...
+          namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: prod  # ...that is only in prod namespace
+```
+
+This network policy is called `prod-netpol` and only allows traffic within the `prod` namespace. All the traffic from other namespaces is denied.
 
 
 ## Create a Service to Expose the Application

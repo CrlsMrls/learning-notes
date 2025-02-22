@@ -120,3 +120,21 @@ The previous object specifies to enforce the `baseline` pod security standard an
 
 The `exemptions` field specifies the namespaces that are exempt from the pod security standards, in this case, the `my-namespace` namespace.
 
+## Create a valid Pod
+
+In a namespace with the `restricted` pod security standard enforced, the pod must comply with the following requirements:
+
+- The pod must not run as the root user.
+- The pod must not have a privileged security context.
+- The pod must not have unrestricted capabilities.
+- The pod must not allow privilege escalation.
+- The pod must have a read-only root filesystem.
+- The pod must have a seccomp profile set to `RuntimeDefault` or `Localhost`.
+
+```yaml
+
+
+
+## 📚 References
+
+- [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/)

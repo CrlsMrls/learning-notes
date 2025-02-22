@@ -4,7 +4,6 @@ Kubernetes has an audit feature that logs all requests made to the Kubernetes AP
 
 Because all requests must go through the API server, the audit logs provide a comprehensive view of all activities in the cluster. They can be crucial for tracking security incidents, allowing security teams to analyze logs to provide evidence of unauthorized actions.
 
-Note: Higher logging levels (especially `RequestResponse`) can increase disk usage and impact API server performance. It's recommended to log only sensitive actions at higher levels.
 
 ## Audit Policy
 
@@ -40,9 +39,9 @@ The audit policy can be applied to different stages of the request. The followin
 
 These stages can be combined to log different stages of the request. For example, only log the request metadata when for non-important requests, and log request metadata, body, and response for critical operations..
 
-## Example of an Audit Policy
+## Examples of an Audit Policy
 
-The following example logs all requests to `delete` `secrets` in the `prod` namespace at the `Metadata` level:
+The following example logs all requests to `delete` and `create` `secrets` in the `prod` namespace at the `Metadata` level:
 
 ```yaml
 apiVersion: audit.k8s.io/v1
@@ -50,10 +49,29 @@ kind: Policy
 rules:
 - level: Metadata
   namespaces: ["prod"]
-  verbs: ["delete"]
+  verbs: ["delete", "create"]
   resources:
   - group: ""
     resources: ["secrets"]
+```
+
+The following example logs all requests (after they are received) to `secrets` and `configmaps` resources in the `prod` and `uat` namespaces at the `Metadata` level:
+
+```yaml
+apiVersion: audit.k8s.io/v1
+kind: Policy
+omitStages:             # Omit RequestReceived
+  - RequestReceived
+rules:
+  - level: Metadata     # New rule at Metadata level
+    resources:          # for secrets and configmaps
+    - group: ""
+      resources:
+      - secrets
+      - configmaps
+    namespaces:         # in all two namespaces
+    - prod
+    - uat
 ```
 
 ## Enabling Audit Logs
@@ -73,9 +91,12 @@ spec:
   containers:
   - command:
     - kube-apiserver
-    - --audit-log-maxage=30
+    - --profiling=false
     - --audit-policy-file=/etc/kubernetes/prod-audit.yaml
     - --audit-log-path=/var/log/kubernetes/audit/prod-audit.log
+    - --audit-log-maxage=30
+    - --audit-log-maxbackup=10
+    - --audit-log-maxsize=100
 ...
 
 volumeMounts:
@@ -101,6 +122,12 @@ volumes:
 
 In the previous example, the audit policy file is mounted as a volume in the API server container. The audit logs are stored in the `/var/log/kubernetes/audit/` directory.
 
+Note: Higher logging levels (especially `RequestResponse`) can increase disk usage and impact API server performance. It's recommended to log only sensitive actions at higher levels and use the flags:
+- `--audit-log-maxage`: number of days to retain audit log files, 
+- `--audit-log-maxbackup`: number of audit log files to retain, and
+- `--audit-log-maxsize`: size in megabytes of the audit log file before it gets rotated
+
+
 ## Viewing Audit Logs
 
 Following the previous example, the audit logs are stored in the `/var/log/kubernetes/audit/` directory from the host machine where the API server is running.
@@ -114,6 +141,8 @@ $ sudo cat /var/log/kubernetes/audit/prod-audit.log
 In the previous example, the audit logs show a request to delete a secret in the `prod` namespace. The request was made by the `kubernetes-admin` user and was successful.
 
 
-
 More info about the audit policy can be found in the [official documentation](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/).
 
+## 📚 References
+
+- [Kubernetes Audit Policy Reference](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/)

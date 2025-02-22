@@ -4,11 +4,11 @@ KubeSec is useful for security risk assessment of Kubernetes workloads. Unlike [
 
 
 1. Security Risk Scoring
-- KubeSec assigns a risk score from 0 to 10 to Kubernetes manifests.
+- KubeSec assigns a risk score to Kubernetes manifests.
 - A higher score = more secure configuration.
-- Helps prioritize security fixes based on severity.
+- This helps to prioritize security fixes based on severity.
   
-1. Identifies Common Security Issues like
+2. Identifies Common Security Issues like
 - Running as root (`runAsNonRoot: false`)
 - Privileged containers (`privileged: true`)
 - Missing read-only root filesystem (`readOnlyRootFilesystem: false`)
@@ -71,3 +71,8 @@ In the previous example, the `Privileged` issue was identified, which resulted i
 ```
 
 Change the `privileged` field to `false` will address the issue.
+
+
+## 📚 References
+
+- [KubeSec](https://kubesec.io/)
